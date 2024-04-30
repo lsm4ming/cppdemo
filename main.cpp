@@ -4,9 +4,9 @@
 #include "md5.h"
 
 int main() {
-//    FileOperation::walkPath("/home/lsm" , [](const String& path)->void{
-//        std::cout << path << std::endl;
-//    });
+    FileOperation::walkPath("/home/lsm" , [](const String& path)->void{
+        std::cout << path << std::endl;
+    });
 
     FileOperation::readTextFile("/home/lsm/kafka/docker-compose.yaml",
                                 [](const String &text, const size_t &len) -> void {
