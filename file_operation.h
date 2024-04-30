@@ -15,28 +15,28 @@
 #include <functional>
 #include "common.h"
 
-constexpr const char* PATH_SEPARATOR = "/";
-constexpr const char* CURRENT_DIR = ".";
-constexpr const char* PARENT_DIR = "..";
+constexpr const char *PATH_SEPARATOR = "/";
+constexpr const char *CURRENT_DIR = ".";
+constexpr const char *PARENT_DIR = "..";
 constexpr const size_t BUFF_SIZE = 4096;
 
-typedef void (*WalkFunc)(const String&);
+typedef void (*WalkFunc)(const String &);
 
-typedef void (*TextReadFunc)(const String&,const size_t&);
+typedef void (*TextReadFunc)(const String &, const size_t &);
 
-typedef void (*ByteReadFunc)(const CharList&,const size_t&);
+typedef void (*ByteReadFunc)(const CharList &, const size_t &);
 
 class FileOperation {
 public:
     FileOperation() = default;
 
-    static void walkPath(const String& path,WalkFunc wf);
+    static void walkPath(const String &path, WalkFunc wf);
 
-    static void readFile(const String &path, const std::function<void(std::ifstream&)>& processFile);
+    static void readFile(const String &path, const std::function<void(std::ifstream &)> &processFile);
 
-    static void readTextFile(const String& path,TextReadFunc rf);
+    static void readTextFile(const String &path, TextReadFunc rf);
 
-    static void readByteFile(const char* path,ByteReadFunc rf);
+    static void readByteFile(const String &path, ByteReadFunc rf);
 };
 
 

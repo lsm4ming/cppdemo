@@ -34,7 +34,7 @@ void FileOperation::walkPath(const String &path, WalkFunc wf) {
     }
 }
 
-void FileOperation::readFile(const String &path, const std::function<void(std::ifstream&)>& processFile) {
+void FileOperation::readFile(const String &path, const std::function<void(std::ifstream &)> &processFile) {
     std::ifstream file(path);
     if (!file.is_open()) {
         perror("open file fail");
@@ -45,7 +45,7 @@ void FileOperation::readFile(const String &path, const std::function<void(std::i
 }
 
 void FileOperation::readTextFile(const String &path, TextReadFunc rf) {
-    readFile(path, [rf](std::ifstream& file) {
+    readFile(path, [rf](std::ifstream &file) {
         std::ostringstream buff;
         char chunk[BUFF_SIZE]; // 每次读取的块大小
         size_t size = 0;
@@ -63,8 +63,8 @@ void FileOperation::readTextFile(const String &path, TextReadFunc rf) {
     });
 }
 
-void FileOperation::readByteFile(const char *path, ByteReadFunc rf) {
-    readFile(path, [rf](std::ifstream& file) {
+void FileOperation::readByteFile(const String &path, ByteReadFunc rf) {
+    readFile(path, [rf](std::ifstream &file) {
         CharList buffer(BUFF_SIZE);
         size_t size = 0;
         while (file.read(buffer.data(), BUFF_SIZE)) {
