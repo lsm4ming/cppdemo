@@ -12,6 +12,8 @@
 class Md5Tool {
 public:
     static String md5(const String &input);
+
+    static String md5(const CharList &input);
 };
 
 

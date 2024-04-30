@@ -11,3 +11,12 @@ String Md5Tool::md5(const String &input) {
     CryptoPP::StringSource give_me_a_name(input, true, new CryptoPP::HashFilter(hash, new CryptoPP::HexEncoder(new CryptoPP::StringSink(digest))));
     return digest;
 }
+
+String Md5Tool::md5(const CharList &input) {
+    CryptoPP::MD5 hash;
+    std::string digest;
+
+    CryptoPP::StringSource give_me_a_name(reinterpret_cast<const unsigned char*>(input.data()), input.size(), true,
+                           new CryptoPP::HashFilter(hash, new CryptoPP::HexEncoder(new CryptoPP::StringSink(digest))));
+    return digest;
+}

@@ -11,6 +11,7 @@
 #include <cstring>
 #include <unistd.h>
 #include <fstream>
+#include <iostream>
 #include "common.h"
 
 constexpr const char* PATH_SEPARATOR = "/";
@@ -22,6 +23,8 @@ typedef void (*WalkFunc)(const String&);
 
 typedef void (*TextReadFunc)(const String&,const size_t&);
 
+typedef void (*ByteReadFunc)(const CharList&,const size_t&);
+
 class FileOperation {
 public:
     FileOperation() = default;
@@ -29,6 +32,8 @@ public:
     static void walkPath(const String& path,WalkFunc wf);
 
     static void readTextFile(const String& path,TextReadFunc rf);
+
+    static void readByteFile(const char* path,ByteReadFunc rf);
 };
 
 

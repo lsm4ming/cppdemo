@@ -56,3 +56,22 @@ void FileOperation::readTextFile(const String &path, TextReadFunc rf) {
     file.close(); // 关闭文件
     rf(buff.str(), size);
 }
+
+void FileOperation::readByteFile(const char *path, ByteReadFunc rf) {
+    std::ifstream file(path);
+    if (!file.is_open()) {
+        perror("open file fail");
+        return;
+    }
+    CharList buffer(BUFF_SIZE);
+    size_t size = 0;
+    while (file.read(buffer.data(), BUFF_SIZE)) {
+        std::cout.write(buffer.data(), BUFF_SIZE);
+        size += BUFF_SIZE;
+    }
+    // 处理剩余的不足一个缓冲区大小的字节
+    std::cout.write(buffer.data(), file.gcount());
+    size += file.gcount();
+    file.close();
+    rf(buffer, size);
+}
