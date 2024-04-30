@@ -34,44 +34,46 @@ void FileOperation::walkPath(const String &path, WalkFunc wf) {
     }
 }
 
-void FileOperation::readTextFile(const String &path, TextReadFunc rf) {
+void FileOperation::readFile(const String &path, const std::function<void(std::ifstream&)>& processFile) {
     std::ifstream file(path);
     if (!file.is_open()) {
         perror("open file fail");
         return;
     }
-    std::ostringstream buff;
-    char chunk[BUFF_SIZE]; // 每次读取的块大小
-    size_t size = 0;
-    while (file.read(chunk, sizeof(chunk))) {
-        buff.write(chunk, file.gcount());
-        size += file.gcount();
-    }
-    if (file.eof()) { // 处理最后一块
-        buff.write(chunk, file.gcount());
-        size += file.gcount();
-    } else {
-        perror("read file fail");
-    }
-    file.close(); // 关闭文件
-    rf(buff.str(), size);
+    processFile(file);
+    file.close();
+}
+
+void FileOperation::readTextFile(const String &path, TextReadFunc rf) {
+    readFile(path, [rf](std::ifstream& file) {
+        std::ostringstream buff;
+        char chunk[BUFF_SIZE]; // 每次读取的块大小
+        size_t size = 0;
+        while (file.read(chunk, sizeof(chunk))) {
+            buff.write(chunk, file.gcount());
+            size += file.gcount();
+        }
+        if (file.eof()) { // 处理最后一块
+            buff.write(chunk, file.gcount());
+            size += file.gcount();
+        } else {
+            perror("read file fail");
+        }
+        rf(buff.str(), size);
+    });
 }
 
 void FileOperation::readByteFile(const char *path, ByteReadFunc rf) {
-    std::ifstream file(path);
-    if (!file.is_open()) {
-        perror("open file fail");
-        return;
-    }
-    CharList buffer(BUFF_SIZE);
-    size_t size = 0;
-    while (file.read(buffer.data(), BUFF_SIZE)) {
-        std::cout.write(buffer.data(), BUFF_SIZE);
-        size += BUFF_SIZE;
-    }
-    // 处理剩余的不足一个缓冲区大小的字节
-    std::cout.write(buffer.data(), file.gcount());
-    size += file.gcount();
-    file.close();
-    rf(buffer, size);
+    readFile(path, [rf](std::ifstream& file) {
+        CharList buffer(BUFF_SIZE);
+        size_t size = 0;
+        while (file.read(buffer.data(), BUFF_SIZE)) {
+            std::cout.write(buffer.data(), BUFF_SIZE);
+            size += BUFF_SIZE;
+        }
+        // 处理剩余的不足一个缓冲区大小的字节
+        std::cout.write(buffer.data(), file.gcount());
+        size += file.gcount();
+        rf(buffer, size);
+    });
 }

@@ -12,6 +12,7 @@
 #include <unistd.h>
 #include <fstream>
 #include <iostream>
+#include <functional>
 #include "common.h"
 
 constexpr const char* PATH_SEPARATOR = "/";
@@ -30,6 +31,8 @@ public:
     FileOperation() = default;
 
     static void walkPath(const String& path,WalkFunc wf);
+
+    static void readFile(const String &path, const std::function<void(std::ifstream&)>& processFile);
 
     static void readTextFile(const String& path,TextReadFunc rf);
 
